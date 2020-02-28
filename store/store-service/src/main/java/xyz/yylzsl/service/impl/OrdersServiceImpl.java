@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.yylzsl.mapper.IOrdersMapper;
-import xyz.yylzsl.pojo.Cart;
 import xyz.yylzsl.pojo.OrderItem;
 import xyz.yylzsl.pojo.Orders;
 import xyz.yylzsl.pojo.User;
@@ -63,8 +62,7 @@ public class OrdersServiceImpl implements IOrdersService {
     }
 
     @Override
-    public List<OrderItem> findDetail(String oid) {
-//        return mapper.findDetail(oid);
-        return null;
+    public Orders findDetail(String oid) {
+        return mapper.findByOrdersOid(oid);
     }
 }

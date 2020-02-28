@@ -38,6 +38,12 @@ public interface IProductMapper {
     @Select("select * from product where pflag = 0 order by pdate desc")
     List<Product> findByPage();
 
-    @Insert("insert into product(pid,pname,shop_price,market_price,pimage,pdate,is_host,pdesc,pflag,cid) values(#{pid},#{pname},#{shop_price},#{market_price},#{pimage},#{pdate},#{is_host},#{pdesc},#{pflag},#{category.cid}")
+    @Insert("insert into product(pid,pname,shop_price,market_price,pimage,pdate,is_hot,pdesc,pflag,cid) values(#{pid},#{pname},#{shop_price},#{market_price},#{pimage},#{pdate},#{is_hot},#{pdesc},#{pflag},#{category.cid})")
     void save(Product product);
+
+    @Update("update product set pname=#{pname},shop_price=#{shop_price},market_price=#{market_price},pimage=#{pimage},pdate=#{pdate},is_hot=#{is_hot},pdesc=#{pdesc},pflag=#{pflag},cid=#{category.cid} where pid = #{pid}")
+    void update(Product product);
+
+    @Select("select * from product where pflag = 1 order by pdate desc")
+    List<Product> findByPflag();
 }

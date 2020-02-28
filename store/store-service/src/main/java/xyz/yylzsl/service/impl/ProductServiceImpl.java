@@ -46,4 +46,15 @@ public class ProductServiceImpl implements IProductService {
     public void save(Product product) {
         mapper.save(product);
     }
+
+    @Override
+    public void update(Product product) {
+        mapper.update(product);
+    }
+
+    @Override
+    public List<Product> findByPflag() {
+        return mapper.findByPflag();
+    }
+
 }

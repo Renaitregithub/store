@@ -20,4 +20,9 @@ public interface IProductService {
     List<Product> findByPage(Integer page, Integer pageSize);
 
     void save(Product product);
+
+    void update(Product product);
+
+    List<Product> findByPflag();
+
 }

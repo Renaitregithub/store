@@ -1,6 +1,5 @@
 package xyz.yylzsl.service;
 
-import xyz.yylzsl.pojo.OrderItem;
 import xyz.yylzsl.pojo.Orders;
 import xyz.yylzsl.pojo.User;
 
@@ -20,5 +19,5 @@ public interface IOrdersService {
 
     List<Orders> findByState(Integer state);
 
-    List<OrderItem> findDetail(String oid);
+    Orders findDetail(String oid);
 }

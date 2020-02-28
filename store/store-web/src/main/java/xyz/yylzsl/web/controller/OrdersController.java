@@ -91,7 +91,27 @@ public class OrdersController {
     }
 
     @RequestMapping("/payOrder")
-    public String payOrder(Orders orders, String pd_FrpId, HttpServletRequest request){
+    public ModelAndView payOrder(Orders orders, String pd_FrpId, HttpServletRequest request){
+        ModelAndView mv = new ModelAndView();
+        Orders ordersPay = service.findByOid(orders.getOid());
+        ordersPay.setName(orders.getName());
+        ordersPay.setTelephone(orders.getTelephone());
+        ordersPay.setAddress(orders.getAddress());
+
+        System.out.println(ordersPay);
+
+        String r6_Order = ordersPay.getOid();
+        String r3_Amt = ordersPay.getTotal().toString();
+
+        orders.setState(2);
+        service.update(orders);
+        request.setAttribute("msg","请！你已经成功付款成！订单号为："+r6_Order+"支付金额为："+r3_Amt);
+        mv.setViewName("info");
+        return mv;
+    }
+
+    @RequestMapping("/payOrder1")
+    public String payOrder1(Orders orders, String pd_FrpId, HttpServletRequest request){
         ModelAndView mv = new ModelAndView();
         Orders ordersPay = service.findByOid(orders.getOid());
         ordersPay.setName(orders.getName());

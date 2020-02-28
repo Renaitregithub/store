@@ -14,10 +14,10 @@
 					// ajax 显示图片,名称,单价,数量
                     var url = "${pageContext.request.contextPath}/adminOrders/showDetail";
                     var param = {"oid":oid};
-                    $.post(url,param,function (data) {
+                    $.post(url,param,function(data) {
                         $("#div"+oid).append("<tr><th>图片</th><th>数量</th><th>小计</th></tr>");
                         $(data).each(function(i,n){
-                            $("#div"+oid).append("<tr><td><img  src='${pageContext.request.contextPath}/"+n.product.pimage+"' width='60' height='65'></td><td style='vertical-align: middle;text-align: center;    '>"+n.quantity+"</td><td style='vertical-align: middle;text-align: center;    '>"+n.total+"</td></tr>");
+                            $("#div"+oid).append("<tr><td><img  src='${pageContext.request.contextPath}/"+n.list[i].product.pimage+"' width='60' height='65'></td><td style='vertical-align: middle;text-align: center;    '>"+n.list[i].quantity+"</td><td style='vertical-align: middle;text-align: center;    '>"+n.list[i].total+"</td></tr>");
                         });
                     },"json");
 
@@ -88,7 +88,7 @@
 													未付款
 												</c:if>
 												<c:if test="${o.state==2}">
-													<a href="${pageContext.request.contextPath}/#">发货</a>
+													<a href="${pageContext.request.contextPath}/adminOrders/sendGoods/${o.oid}">发货</a>
 												</c:if>
 												<c:if test="${o.state==3}">
 													已发货

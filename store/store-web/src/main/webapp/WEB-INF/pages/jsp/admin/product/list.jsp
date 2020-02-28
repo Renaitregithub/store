@@ -5,6 +5,8 @@
 		<meta http-equiv="Content-Language" content="zh-cn">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css" type="text/css" />
+        <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js" type="text/javascript"></script>
 		<link href="${pageContext.request.contextPath}/css/Style1.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/public.js"></script>
 		<script type="text/javascript">
@@ -89,14 +91,14 @@
                                                 </c:if>
 											</td>
 											<td align="center" style="HEIGHT: 22px">
-												<a href="">
+												<a href="${pageContext.request.contextPath}/adminProduct/showEdit/${p.pid}">
 													<img src="${pageContext.request.contextPath}/img/admin/i_edit.gif" border="0" style="CURSOR: hand">
 												</a>
 											</td>
 									
 											<td align="center" style="HEIGHT: 22px">
 												<%--下架 pushdown --%>
-												<a href="${pageContext.request.contextPath}/">
+												<a href="${pageContext.request.contextPath}/adminProduct/pushDown/${p.pid}">
 													<img src="${pageContext.request.contextPath}/img/admin/i_del.gif" width="16" height="16" border="0" style="CURSOR: hand">
 												</a>
 											</td>
@@ -111,13 +113,18 @@
         <!--分页 -->
         <div style="width:380px;margin: 50px auto 0;">
             <ul class="pagination" style="text-align:center; margin-top:10px;">
-                <li><a href="">共${pageInfo.pageNum}页/第${pageInfo.lastPage}页</a></li>
+                <li><a href="">第${pageInfo.pageNum}页/共${pageInfo.lastPage}页</a></li>
                 <c:if test="${pageInfo.pageNum!=pageInfo.firstPage}">
                     <li><a href="${pageContext.request.contextPath}/adminProduct/findAll/">首页</a></li>
                     <li><a href="${pageContext.request.contextPath}/adminProduct/findAll?page=${pageInfo.prePage}">上一页</a></li>
                 </c:if>
                 <c:forEach begin="1" end="${pageInfo.pages}" varStatus="status" >
-                    <li><a href="${pageContext.request.contextPath}/adminProduct/findAll?page=${status.count}">${status.count}</a></li>
+                    <c:if test="${pageInfo.pageNum==status.count}">
+                        <li><a href="${pageContext.request.contextPath}/adminProduct/findAll?page=${status.count}" class="disabled">${status.count}</a></li>
+                    </c:if>
+                    <c:if test="${pageInfo.pageNum!=status.count}">
+                        <li><a class="active" href="${pageContext.request.contextPath}/adminProduct/findAll?page=${status.count}">${status.count}</a></li>
+                    </c:if>
                 </c:forEach>
                 <c:if test="${pageInfo.pageNum!=pageInfo.lastPage}">
                     <li><a href="${pageContext.request.contextPath}/adminProduct/findAll?page=${pageInfo.nextPage}">下一页</a></li>

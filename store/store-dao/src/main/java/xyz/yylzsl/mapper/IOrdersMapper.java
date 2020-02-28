@@ -56,18 +56,20 @@ public interface IOrdersMapper {
             @Result(property = "name",column = "name"),
             @Result(property = "telephone",column = "telephone"),
             @Result(property = "user",column = "uid", one = @One(select = "xyz.yylzsl.mapper.IUserMapper.findByUid",fetchType = FetchType.EAGER)),
-            @Result(property = "user",column = "uid", one = @One(select = "xyz.yylzsl.mapper.IUserMapper.findByUid",fetchType = FetchType.EAGER)),
+            @Result(property = "list",column = "oid",many = @Many(select = "xyz.yylzsl.mapper.IOrderItemMapper.findByOid"))
     })
     Orders findByOrdersOid(String oid);
 
     @Update("update orders set total=#{total},state=#{state},address=#{address},name=#{name},telephone=#{telephone} where oid = #{oid}")
     void update(Orders ordersPay);
 
-    @Select("select * from orders where state = #{state} order by oderTime desc")
+    @Select("select * from orders where state = #{state} order by ordertime desc")
     List<Orders> findByState(Integer state);
 
-    @Select("select * from orders order by oderTime desc")
+    @Select("select * from orders order by ordertime desc")
     List<Orders> findAll();
 
-//    List<OrderItem> findDetail(String oid);
+    @Select("select * from orders where o.oid=#{oid}")
+    List<OrderItem> findDetail(String oid);
+
 }
