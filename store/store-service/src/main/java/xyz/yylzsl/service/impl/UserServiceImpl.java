@@ -1,5 +1,6 @@
 package xyz.yylzsl.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.yylzsl.mapper.IUserMapper;
@@ -41,5 +42,26 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User findByUsername(String username) {
         return userMapper.findByUsername(username);
+    }
+
+    @Override
+    public List<User> findAll(Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        return userMapper.findAll();
+    }
+
+    @Override
+    public void delete(String uid) {
+        userMapper.delete(uid);
+    }
+
+    @Override
+    public User findbyUid(String uid) {
+        return userMapper.findByUid(uid);
+    }
+
+    @Override
+    public void update(User user) {
+        userMapper.update(user);
     }
 }

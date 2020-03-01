@@ -11,7 +11,7 @@ import java.util.List;
 public interface ICategoryService {
 
     // List<Category> findByAjax() throws Exception;
-    List<Category> findAll()throws Exception;
+    List<Category> findAll(Integer page,Integer pageSize)throws Exception;
 
     void save(Category category);
 

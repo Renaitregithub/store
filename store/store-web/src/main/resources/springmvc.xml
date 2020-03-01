@@ -27,6 +27,10 @@ http://www.springframework.org/schema/context/spring-context-4.2.xsd">
     <mvc:resources location="/WEB-INF/pages/fonts/" mapping="/fonts/**"/>
     <mvc:resources location="/WEB-INF/pages/products/" mapping="/products/**"/>
 
+    <mvc:resources location="/WEB-INF/pages/jsp/admin/css/" mapping="/admin/css/**"/>
+    <mvc:resources location="/WEB-INF/pages/jsp/admin/img/" mapping="/admin/img/**"/>
+    <mvc:resources location="/WEB-INF/pages/jsp/admin/plugins/" mapping="/admin/plugins/**"/>
+
     <!--时间转换器-->
     <bean class="org.springframework.context.support.ConversionServiceFactoryBean" id="conversionService">
         <property name="converters">
@@ -41,9 +45,20 @@ http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
     <!--拦截器-->
     <mvc:interceptors>
-        <mvc:interceptor>
+        <!--<mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="xyz.yylzsl.web.interceptor.LoginInterceptor" id="interceptor"/>
+        </mvc:interceptor>-->
+
+        <mvc:interceptor>
+            <mvc:mapping path="/admin*"/>
+            <mvc:mapping path="/admin*/**"/>
+            <bean class="xyz.yylzsl.web.interceptor.AdminLoginInterceptor" id="interceptor2"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="xyz.yylzsl.web.interceptor.LoginInterceptor" id="interceptor3"/>
         </mvc:interceptor>
 
         <mvc:interceptor>
@@ -51,7 +66,13 @@ http://www.springframework.org/schema/context/spring-context-4.2.xsd">
             <mvc:mapping path="/order*/**"/>
             <mvc:mapping path="/cart*"/>
             <mvc:mapping path="/cart*/**"/>
-            <bean class="xyz.yylzsl.web.interceptor.PrivilegeInterfaceptor" id="interceptor2"/>
+            <bean class="xyz.yylzsl.web.interceptor.PrivilegeInterfaceptor" id="interceptor4"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/admin*"/>
+            <mvc:mapping path="/admin*/**"/>
+            <bean class="xyz.yylzsl.web.interceptor.AdminPrivilegeInterfaceptor" id="interceptor5"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

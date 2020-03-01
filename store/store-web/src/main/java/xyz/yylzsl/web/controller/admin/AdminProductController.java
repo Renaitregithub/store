@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,27 +36,34 @@ public class AdminProductController {
     @Autowired
     private ICategoryService categoryService;
 
-    @RequestMapping("/findAll")
-    public ModelAndView findByPage(@RequestParam(name = "page",required = true,defaultValue = "1") Integer page, @RequestParam(name="pageSize",required = true,defaultValue = "8") Integer pageSize){
+
+    @ModelAttribute
+    public ModelAndView before(@RequestParam(name = "page",required = true,defaultValue = "1") Integer page, @RequestParam(name="pageSize",required = true,defaultValue = "6")Integer pageSize) throws Exception {
         ModelAndView mv = new ModelAndView();
         List<Product> list = productService.findByPage(page,pageSize);
         PageInfo pageInfo = new PageInfo(list);
+        List<Category> category = categoryService.findAll(1, 20);
+        mv.addObject("category",category);
         mv.addObject("pageInfo",pageInfo);
-        mv.setViewName("/admin/product/list");
+        return mv;
+    }
+
+    @RequestMapping("/findAll")
+    public ModelAndView findByPage(ModelAndView mv){
+        mv.setViewName("/admin/product/product-list");
         return mv;
     }
 
     @RequestMapping("/showAdd")
-    public ModelAndView showAdd() throws Exception {
-        List<Category> list = categoryService.findAll();
-        ModelAndView mv = new ModelAndView();
+    public ModelAndView showAdd(ModelAndView mv) throws Exception {
+        List<Category> list = categoryService.findAll(1, 8);
         mv.addObject("list",list);
-        mv.setViewName("/admin/product/add");
+        mv.setViewName("/admin/product/product-add");
         return mv;
     }
 
     @RequestMapping("/add")
-    public ModelAndView Add(Product product,String cid, MultipartFile upload, HttpServletRequest request) throws IOException {
+    public ModelAndView Add(Product product,String cid, MultipartFile upload, HttpServletRequest request,ModelAndView mv) throws IOException {
 
         String filename = "";
         String fileUploadName = upload.getOriginalFilename();
@@ -83,62 +91,18 @@ public class AdminProductController {
         System.out.println(product);
 
         productService.save(product);
-        List<Product> list = productService.findByPage(1, 8);
-        PageInfo pageInfo = new PageInfo(list);
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("pageInfo",pageInfo);
-        mv.setViewName("/admin/product/list");
+        mv.setViewName("/admin/product/product-list");
         return mv;
     }
+
 
     @RequestMapping("/showEdit/{pid}")
-    public ModelAndView showEdit(@PathVariable("pid")String pid) throws Exception {
-        ModelAndView mv = new ModelAndView();
+    public ModelAndView showEdit(@PathVariable("pid")String pid,ModelAndView mv) {
         Product product = productService.findByPid(pid);
-        List<Category> list = categoryService.findAll();
-        mv.addObject("list",list);
         mv.addObject("product",product);
-        mv.setViewName("/admin/product/edit");
+        mv.setViewName("/admin/product/product-edit");
         return mv;
     }
-
-    @RequestMapping("/pushDownUI")
-    public  ModelAndView pushDownUI(){
-        List<Product> list = productService.findByPflag();
-        PageInfo pageInfo = new PageInfo(list);
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("pageInfo",pageInfo);
-        mv.setViewName("/admin/product/pushDown_list");
-        return mv;
-    }
-
-    @RequestMapping("/pushDown/{pid}")
-    public  ModelAndView pushDown(@PathVariable("pid")String pid){
-        Product product = productService.findByPid(pid);
-        product.setPflag(1);
-        productService.update(product);
-        ModelAndView mv = new ModelAndView();
-        List<Product> list = productService.findByPage(1,8);
-        PageInfo pageInfo = new PageInfo(list);
-        mv.addObject("pageInfo",pageInfo);
-        mv.setViewName("/admin/product/list");
-        return mv;
-    }
-
-    @RequestMapping("/pushUp/{pid}")
-    public  ModelAndView pushUp(@PathVariable("pid")String pid){
-        Product product = productService.findByPid(pid);
-        product.setPflag(0);
-        productService.update(product);
-        ModelAndView mv = new ModelAndView();
-        List<Product> list = productService.findByPage(1,8);
-        PageInfo pageInfo = new PageInfo(list);
-        mv.addObject("pageInfo",pageInfo);
-        mv.setViewName("/admin/product/list");
-        return mv;
-    }
-
-
 
     @RequestMapping("/update")
     public ModelAndView update(Product product,MultipartFile upload,String cid,HttpServletRequest request) throws IOException {
@@ -164,21 +128,53 @@ public class AdminProductController {
 
         Category category = new Category();
         category.setCid(cid);
+        product.setCategory(category);
 
         Product product1 = productService.findByPid(product.getPid());
+
         product.setPflag(product1.getPflag());
         product.setPdate(product.getPdate());
 
         productService.update(product);
 
-
         ModelAndView mv = new ModelAndView();
         List<Product> list = productService.findByPage(1,8);
         PageInfo pageInfo = new PageInfo(list);
         mv.addObject("pageInfo",pageInfo);
-        mv.setViewName("/admin/product/list");
+        mv.setViewName("/admin/product/product-list");
         return mv;
     }
 
+    @RequestMapping("/pushDownUI")
+    public  ModelAndView pushDownUI(){
+        List<Product> list = productService.findByPflag();
+        PageInfo pageInfo = new PageInfo(list);
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("pageInfo",pageInfo);
+        mv.setViewName("/admin/product/product-pushDown-list");
+        return mv;
+    }
+
+    @RequestMapping("/pushDown/{pid}")
+    public  ModelAndView pushDown(@PathVariable("pid")String pid,ModelAndView mv){
+        Product product = productService.findByPid(pid);
+        product.setPflag(1);
+        productService.update(product);
+        mv.setViewName("/admin/product/product-list");
+        return mv;
+    }
+
+    @RequestMapping("/pushUp/{pid}")
+    public  ModelAndView pushUp(@PathVariable("pid")String pid){
+        Product product = productService.findByPid(pid);
+        product.setPflag(0);
+        productService.update(product);
+        ModelAndView mv = new ModelAndView();
+        List<Product> list = productService.findByPage(1,8);
+        PageInfo pageInfo = new PageInfo(list);
+        mv.addObject("pageInfo",pageInfo);
+        mv.setViewName("/admin/product/product-list");
+        return mv;
+    }
 
 }

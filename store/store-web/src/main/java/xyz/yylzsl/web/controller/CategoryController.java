@@ -19,7 +19,7 @@ public class CategoryController {
 
     @RequestMapping("/findAll")
     public @ResponseBody List findAll() throws Exception {
-        List<Category> list = categoryService.findAll();
+        List<Category> list = categoryService.findAll(1,8);
         return list;
     }
 

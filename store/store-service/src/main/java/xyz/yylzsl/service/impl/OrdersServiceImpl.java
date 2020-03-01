@@ -52,12 +52,14 @@ public class OrdersServiceImpl implements IOrdersService {
     }
 
     @Override
-    public List<Orders> findAll() {
+    public List<Orders> findAll(Integer page,Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
         return mapper.findAll();
     }
 
     @Override
-    public List<Orders> findByState(Integer state) {
+    public List<Orders> findByState(Integer state,Integer page,Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
         return mapper.findByState(state);
     }
 

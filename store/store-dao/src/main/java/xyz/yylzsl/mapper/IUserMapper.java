@@ -1,9 +1,12 @@
 package xyz.yylzsl.mapper;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import xyz.yylzsl.pojo.User;
+
+import java.util.List;
 
 
 /**
@@ -28,4 +31,12 @@ public interface IUserMapper {
 
     @Select("select * from user where uid = #{uid}")
     User findByUid(String uid);
+
+    @Select("select * from user")
+    List<User> findAll();
+
+    @Delete("delete from user where uid = #{uid}")
+    void delete(String uid);
+
+
 }

@@ -21,7 +21,8 @@ public class CategoryServiceImpl implements ICategoryService {
 
 
     @Override
-    public List<Category> findAll() throws Exception {
+    public List<Category> findAll(Integer page,Integer pageSize) throws Exception {
+        PageHelper.startPage(page,pageSize);
         return categoryMapper.findAll();
     }
 

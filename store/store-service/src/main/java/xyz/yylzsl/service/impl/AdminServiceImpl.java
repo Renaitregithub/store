@@ -16,4 +16,16 @@ public class AdminServiceImpl implements IAdminService {
     public Admin login(Admin admin) {
         return mapper.login(admin);
     }
+
+    @Override
+    public void updateUser(Admin admin) {
+        mapper.update(admin);
+    }
+
+    @Override
+    public Admin findById(String id) {
+        return mapper.findById(id);
+    }
+
+
 }

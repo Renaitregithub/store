@@ -1,10 +1,9 @@
 package xyz.yylzsl.web.controller.admin;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import xyz.yylzsl.pojo.Orders;
 import xyz.yylzsl.service.IOrdersService;
@@ -18,18 +17,25 @@ public class AdminOrdersController {
     @Autowired
     private IOrdersService ordersService;
 
-    @RequestMapping("/findAll")
-    public ModelAndView findAll(Integer state){
+    @ModelAttribute
+    public ModelAndView before(@RequestParam(name = "page",required = true,defaultValue = "1") Integer page, @RequestParam(name="pageSize",required = true,defaultValue = "6")Integer pageSize,Integer state){
         ModelAndView mv = new ModelAndView();
         List<Orders> list = null;
+        PageInfo pageInfo = null;
         if(state==null){
-            list = ordersService.findAll();
+            list = ordersService.findAll(page,pageSize);
+            pageInfo = new PageInfo(list);
         }else{
-            list = ordersService.findByState(state);
+            list = ordersService.findByState(state,page,pageSize);
+            pageInfo = new PageInfo(list);
         }
+        mv.addObject("pageInfo",pageInfo);
+        return mv;
+    }
 
-        mv.addObject("list",list);
-        mv.setViewName("admin/order/list");
+    @RequestMapping("/findAll")
+    public ModelAndView findAll(ModelAndView mv){
+        mv.setViewName("admin/orders/orders-list");
         return mv;
     }
 
@@ -48,9 +54,9 @@ public class AdminOrdersController {
 
         ModelAndView mv = new ModelAndView();
         List<Orders> list = null;
-        list = ordersService.findAll();
+        list = ordersService.findAll(1,6);
         mv.addObject("list",list);
-        mv.setViewName("admin/order/list");
+        mv.setViewName("admin/orders/orders-list");
         return mv;
     }
 }

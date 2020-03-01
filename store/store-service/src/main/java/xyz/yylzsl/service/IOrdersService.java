@@ -15,9 +15,9 @@ public interface IOrdersService {
 
     void update(Orders ordersPay);
 
-    List<Orders> findAll();
+    List<Orders> findAll(Integer page,Integer pageSize);
 
-    List<Orders> findByState(Integer state);
+    List<Orders> findByState(Integer state,Integer page,Integer pageSize);
 
     Orders findDetail(String oid);
 }
